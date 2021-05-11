@@ -57,3 +57,7 @@ HttpResponsePtr BOMRemover::doAdvice(const HttpRequestPtr &req) const
 		req->setBody(removeFirstN(body, 3));
 	return nullptr;
 }
+
+void BOMRemover::shutdown()
+{
+}

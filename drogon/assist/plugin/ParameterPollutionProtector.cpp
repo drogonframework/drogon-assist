@@ -27,3 +27,7 @@ HttpResponsePtr ParameterPollutionProtector::doAdvice(const HttpRequestPtr &req)
 	auto resp = app().getCustomErrorHandler()(k406NotAcceptable);
 	return resp;
 }
+
+void ParameterPollutionProtector::shutdown()
+{
+}
