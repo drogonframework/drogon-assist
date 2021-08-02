@@ -29,7 +29,7 @@ drassist::passwdhash::verify("abcdef", hashed); // false
 ```json
 /*Add this into Drogon's configuration file*/
 {
-	"name": "ParameterPollutionProtector",
+	"name": "drassist::ParameterPollutionProtector",
 }
 ```
 
@@ -37,7 +37,7 @@ drassist::passwdhash::verify("abcdef", hashed); // false
 ```json
 /*Add this into Drogon's configuration file*/
 {
-	"name": "BOMRemover",
+	"name": "drassist::BOMRemover",
 }
 ```
 

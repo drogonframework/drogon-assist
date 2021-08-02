@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(drogon_assist)
 
+set(CMAKE_CXX_STANDARD 17)
+
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(BOTAN2 REQUIRED)
 find_package(Drogon REQUIRED)
@@ -11,7 +13,8 @@ add_library(drogon_assist STATIC
 	drogon/assist/crypto/Blake2b.cpp
 	drogon/assist/hash.cpp
 	drogon/assist/plugin/ParameterPollutionProtector.cpp
-	drogon/assist/plugin/BOMRemover.cpp)
+	drogon/assist/plugin/BOMRemover.cpp
+	drogon/assist/basic_auth.cpp)
 
 target_link_libraries(drogon_assist PRIVATE ${BOTAN2_LIBRARIES} ${DROGON_LIBRARIES} bsd)
 target_include_directories(drogon_assist PUBLIC ${BOTAN2_INCLUDE_DIRS} ${DROGON_INCLUDE_DIRS})
