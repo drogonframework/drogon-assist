@@ -7,6 +7,7 @@ namespace drassist
 {
 /// The SHA3 hash function
 /**
+ * \brief Computes the SHA3 bash
  * \param data the input of the hash function
  * \param dataLen the length of the data
  * \param hashLength the length of the output hash (in bytes), before HEX
@@ -24,12 +25,12 @@ inline std::string sha3(const drogon::string_view &data, size_t hashLength = 32)
 
 /// The BLAKE2b hash function
 /**
+ * \brief Computes the BLAKE2b bash
  * \param data the input of the hash function
  * \param dataLen the length of the data
  * \param hashLength the length of the output hash (in bytes), before HEX
  * \param key (optional) the key for BLAKE2 keying
- * \param keyLength
- * length of the key
+ * \param keyLength length of the key
  */
 std::string getBlake2b(const char *data,
                        const size_t dataLen,
