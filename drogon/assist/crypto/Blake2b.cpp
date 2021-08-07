@@ -333,7 +333,7 @@ void blake2b_final(blake2b_state* state, void* out, size_t outlen)
 
 }  // namespace
 
-namespace drogon::internal
+namespace drassist::internal
 {
 /**
  * The main blake2b function
