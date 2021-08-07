@@ -79,16 +79,38 @@ std::string makeSignString(const drogon::HttpRequestPtr& req, const std::vector<
 }
 
 void sign(drogon::HttpRequestPtr& req, const drogon::HttpClientPtr& client, const std::string& key_id, const Botan::Private_Key& private_key,
-     const std::vector<std::string>& headers)
+     const std::vector<std::string>& headers, std::string algorithm)
 {
+    if(private_key.algo_name() != "RSA")
+        throw std::invalid_argument("Must use RSA in drassist::http_signature::sign");
+
+    std::string algo;
+    algorithm = internal::to_lower(algorithm);
+    if(algorithm == "sha-256" || algorithm == "sha256")
+        algo = "EMSA3(SHA-256)";
+    else if(algorithm == "sha-1" || algorithm == "sha1")
+        algo = "EMSA3(SHA1)";
+    else if(algorithm == "sha-512" || algorithm == "sha512")
+        algo = "EMSA3(SHA-512)";
+    else
+        throw std::domain_error(algorithm + " is not a valid for HTTP Signature. Please use sha-256, sha1 or sha-512");
+
     thread_local static Botan::AutoSeeded_RNG rng;
     std::string sign_str = internal::makeSignString(req, headers, client.get());
-    Botan::PK_Signer signer(private_key, rng, "EMSA3(SHA-256)");
+    Botan::PK_Signer signer(private_key, rng, algo);
 
     signer.update(sign_str);
     auto signature = signer.signature(rng);
 
-    req->addHeader("Authorization", "Signature keyId=\"" + key_id + "\",algorithm=\"rsa-sha256\""
+    std::string algo_string;
+    if(algo == "EMSA3(SHA-256)")
+        algo_string = "rsa-sha256";
+    else if(algo == "EMSA3(SHA1)")
+        algo_string = "rsa-sha1";
+    else if(algo == "EMSA3(SHA-512)")
+        algo_string = "rsa-sha512";
+
+    req->addHeader("Authorization", "Signature keyId=\"" + key_id + "\",algorithm=\""+ algo_string + "\""
         ",headers=\"" + internal::join(headers) + "\",signature=\"" + utils::base64Encode(signature.data(), signature.size(), false) + "\"");
 }
 
@@ -146,6 +168,8 @@ optional<SignatureData> parse(const drogon::HttpRequestPtr& req)
                     data.headers = utils::splitString(value, " ", false);
                 else if(key == "signature")
                     data.signature = value;
+                else if(key == "ext")
+                    data.ext = value;
                 else {
                     LOG_TRACE << key + "is not a valid item for HTTP Signature";
                     return {};
@@ -161,8 +185,10 @@ optional<SignatureData> parse(const drogon::HttpRequestPtr& req)
             if(ch == '"')
                 in_quotes = false;
         }
-
     }
+
+    if(data.headers.size() == 0)
+        data.headers = {"date"};
 
     return data;
 }
@@ -173,11 +199,26 @@ bool verify(const drogon::HttpRequestPtr& req, const Botan::Public_Key& public_k
     if(data.has_value() == false)
         return false;
     const auto& signature_data = data.value();
-    if(signature_data.algorithm != "rsa-sha256") {
-        LOG_WARN << "DrAssist does not support non RSA-SHA256 alogirhms";
+    static const std::regex re("rsa-([\\w]+)");
+    std::smatch sm;
+    if(!std::regex_match(signature_data.algorithm, sm, re)) {
+        LOG_WARN << "Drogon Assist does not support non RSA signing alogirthms for HTTP Signature";
         return false;
     }
-    Botan::PK_Verifier verifier(public_key, "EMSA3(SHA-256)");
+    std::string algo = sm[1];
+    std::string algo_str;
+    if(algo == "sha256")
+        algo_str = "EMSA3(SHA-256)";
+    else if(algo == "sha1")
+        algo_str = "EMSA3(SHA1)";
+    else if(algo == "sha512")
+        algo_str = "EMSA3(SHA-512)";
+    else {
+        LOG_TRACE << algo << " is not supported as a hash for HTTP Signatures";
+        return false;
+    }
+
+    Botan::PK_Verifier verifier(public_key, algo_str);
     auto sign_str = internal::makeSignString(req, signature_data.headers);
     auto signature = utils::base64Decode(signature_data.signature);
 
