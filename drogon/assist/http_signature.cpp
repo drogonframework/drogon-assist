@@ -114,7 +114,7 @@ void sign(drogon::HttpRequestPtr& req, const drogon::HttpClientPtr& client, cons
         ",headers=\"" + internal::join(headers) + "\",signature=\"" + utils::base64Encode(signature.data(), signature.size(), false) + "\"");
 }
 
-optional<SignatureData> parse(const drogon::HttpRequestPtr& req)
+drogon::optional<SignatureData> parse(const drogon::HttpRequestPtr& req)
 {
     SignatureData data;
     const auto& auth = req->getHeader("Authorization");
@@ -193,12 +193,8 @@ optional<SignatureData> parse(const drogon::HttpRequestPtr& req)
     return data;
 }
 
-bool verify(const drogon::HttpRequestPtr& req, const Botan::Public_Key& public_key)
+bool verify(const drogon::HttpRequestPtr& req, const Botan::Public_Key& public_key, const SignatureData& signature_data)
 {
-    auto data = parse(req);
-    if(data.has_value() == false)
-        return false;
-    const auto& signature_data = data.value();
     static const std::regex re("rsa-([\\w]+)");
     std::smatch sm;
     if(!std::regex_match(signature_data.algorithm, sm, re)) {
@@ -224,6 +220,15 @@ bool verify(const drogon::HttpRequestPtr& req, const Botan::Public_Key& public_k
 
     verifier.update(sign_str);
     return verifier.check_signature((uint8_t*)signature.data(), signature.size());
+}
+
+bool verify(const drogon::HttpRequestPtr& req, const Botan::Public_Key& public_key)
+{
+    auto data = parse(req);
+    if(data.has_value() == false)
+        return false;
+    const auto& signature_data = data.value();
+    return verify(req, public_key, signature_data);
 }
 
 }
