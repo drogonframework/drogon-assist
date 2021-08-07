@@ -7,9 +7,17 @@ Dependencies:
  * Botan-2
 
 **Note:** This library is in early development. The APIs may change without prior notice
+
 **Note:** You need to recompile this library after any update to Drogon. Otherwise ABI incompatablity may cause unexpected issues.
 
-## Features:
+## Features
+
+* Password hashing
+* BasicAuth parsing
+* [HTTP Signature][http_signature] genration and verifing (RSA only)
+* SHA3/Blake2b hash
+
+## Example
 
 ### Easy Password Hashing
 
@@ -42,5 +50,4 @@ drassist::passwdhash::verify("abcdef", hashed); // false
 }
 ```
 
-
-And more..
+[http_signature]: https://tools.ietf.org/id/draft-cavage-http-signatures-01.html
