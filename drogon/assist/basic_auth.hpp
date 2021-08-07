@@ -7,7 +7,7 @@ namespace drassist
 {
 
 /**
- * \brief parses a bacic auth request and extracts the username and password
+ * \brief parses a basic auth request and extracts the username and password
  * \param req the basic auth request
  * \return A pair of string. The first element being the user name and the seond being the password
  */

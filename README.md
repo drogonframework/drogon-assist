@@ -6,6 +6,7 @@ Dependencies:
  * libbsd (if not on *BSD)
  * Botan-2
 
+**Note:** This library is in early development. The APIs may change without prior notice
 **Note:** You need to recompile this library after any update to Drogon. Otherwise ABI incompatablity may cause unexpected issues.
 
 ## Features:
