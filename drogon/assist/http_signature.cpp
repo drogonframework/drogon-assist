@@ -128,7 +128,7 @@ drogon::optional<SignatureData> parse(const drogon::HttpRequestPtr& req)
         return {};
     }
 
-    auto auth_view = std::string_view(auth).substr(signature_it+1+std::string_view("Signature").size());
+    auto auth_view = string_view(auth).substr(signature_it+1+string_view("Signature").size());
 
     size_t begin = 0;
     bool in_quotes = false;
@@ -146,7 +146,7 @@ drogon::optional<SignatureData> parse(const drogon::HttpRequestPtr& req)
                 size_t end = i;
                 std::string kv_str(auth_view.begin()+begin, auth_view.begin()+end);
                 auto it = kv_str.find('=');
-                if(it == std::string_view::npos) {
+                if(it == string_view::npos) {
                     LOG_TRACE << "Bad Authorization header format";
                     return {};
                 }

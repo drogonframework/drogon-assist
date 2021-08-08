@@ -17,7 +17,7 @@ uint32_t drassist::secureRandom(uint32_t lower, uint32_t upper)
 
 std::string drassist::secureRandomString(size_t length)
 {
-	const std::string_view alphabet = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	const string_view alphabet = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	std::string result;
 	result.resize(length);
 	for(auto& ch : result)
