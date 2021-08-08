@@ -19,8 +19,8 @@ target_link_libraries(drogon_assist PUBLIC ${BOTAN2_LIBRARIES} ${DROGON_LIBRARIE
 target_include_directories(drogon_assist PUBLIC ${BOTAN2_INCLUDE_DIRS} ${DROGON_INCLUDE_DIRS})
 
 include_directories(.)
-option(BUILD_EXAMPLE "Build Drogon Assist examples" ON)
-option(BUILD_TESTS "Build Drogon Assist tests" ON)
+option(DRASSIST_BUILD_EXAMPLE "Build Drogon Assist examples" ON)
+option(DRASSIST_BUILD_TESTS "Build Drogon Assist tests" ON)
 
 set(DROGON_ASSIST_HEADERS
 	drogon/assist/hash.hpp
