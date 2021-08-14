@@ -16,6 +16,7 @@ Dependencies:
 * BasicAuth parsing
 * [HTTP Signature][http_signature] genration and verifing (RSA only)
 * SHA3/Blake2b hash
+* Auxiliary Plugins
 
 ## Example
 
