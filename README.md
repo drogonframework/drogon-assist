@@ -1,6 +1,6 @@
 # Drogon Assist
 
-Drogon Assist is a 3rd party toolkit (even though the author is a maintainer of Drogon) for features that doesn't make it into Drogon's repository. Either because it is out of scope for the core frameowrk, too much dependency or just because.
+Drogon Assist is a 3rd party toolkit (even though the author is a maintainer of Drogon) for features that doesn't make it into Drogon's repository. Either because it is out of scope for the core framework, too much dependency or just because.
 
 Dependencies:
  * libbsd (if not on *BSD)
