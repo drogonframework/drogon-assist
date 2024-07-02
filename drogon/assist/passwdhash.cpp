@@ -9,6 +9,7 @@
 static Botan::System_RNG rng;
 using namespace drogon;
 using namespace drassist;
+using namespace std;
 
 uint32_t drassist::secureRandom(uint32_t lower, uint32_t upper)
 {
