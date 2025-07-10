@@ -24,7 +24,7 @@ static bool startsWith(const string_view str, const string_view target)
 	return memcmp(str.begin(), target.begin(), target.size()) == 0;
 }
 
-static std::string removeFirstN(const string_view str, size_t n)
+static std::string removeFirstN(const std::string_view str, size_t n)
 {
 	assert(str.size() >= n);
 	return std::string(str.begin()+n, str.end());
@@ -35,7 +35,7 @@ HttpResponsePtr BOMRemover::doAdvice(const HttpRequestPtr &req) const
 	if(actions_types.find(req->getContentType()) == actions_types.end())
 		return nullptr;
 
-	string_view body = req->getBody();
+	std::string_view body = req->getBody();
 
 	if(startsWith(body, "\xEF\xBB\xBF")) // UTF-8
 		req->setBody(removeFirstN(body, 3));

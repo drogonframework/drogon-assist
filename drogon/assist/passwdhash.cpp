@@ -40,7 +40,7 @@ static std::tuple<std::string, std::string, std::string> parse_passwdhash(const 
 
 std::string passwdhash::argon2(const std::string& passwd, size_t salt_length)
 {
-	// Still add out own salt to keep the format same with the fallback algorithms
+	// Still add our own salt to keep the format same with the fallback algorithms
 	auto salt = secureRandomString(salt_length);
 	auto salted_passwd = salt + passwd;
 	auto hash = Botan::argon2_generate_pwhash(salted_passwd.c_str(), salted_passwd.size(), rng, 1, 65536, 2, 2, 16, 32);
